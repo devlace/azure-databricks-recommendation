@@ -1,0 +1,47 @@
+az group create --name myResourceGroup --location eastus
+
+# Create ACR
+az acr create --resource-group myResourceGroup --name <acrName> --sku Basic --admin-enabled true
+
+# Login to ACR
+az acr login --name <acrName>
+
+# Show login server
+az acr show --name <acrName> --query loginServer --output table
+
+# Tag image with ACR login server
+docker tag aci-tutorial-app <acrLoginServer>/aci-tutorial-app:v1
+
+# Show docker images
+docker images 
+
+# Push image to ACR
+docker push <acrLoginServer>/aci-tutorial-app:v1
+
+# List images in ACR
+az acr repository list --name <acrName> --output table
+
+# See tags in ACR
+az acr repository show-tags --name <acrName> --repository aci-tutorial-app --output table
+
+# Show password for deployment
+az acr credential show --name laceeusacr01 --query "passwords[0].value"
+
+# Deploy container
+az container create \
+    --resource-group myResourceGroup \
+    --name aci-tutorial-app \
+    --image <acrLoginServer>/aci-tutorial-app:v1 \
+    --cpu 1 --memory 1 \
+    --registry-username <acrName> \
+    --registry-password <acrPassword> \
+    --dns-name-label aci-demo \
+    --ports 80
+#az container create --resource-group lace-eus-rg-01 --name laceehdemo --image laceeusacr01.azurecr.io/eventhubgenerator:v1 --cpu 1 --memory 1 --registry-username laceeusacr01.azurecr.io --registry-password DPk9Wzng6FPRpA/rZf4LCwnMGjdnds8= --dns-name-label laceehdem
+o --ports 80
+
+# Verify deployment
+az container show --resource-group myResourceGroup --name aci-tutorial-app --query instanceView.state
+
+# View logs
+az container logs --resource-group myResourceGroup --name aci-tutorial-app

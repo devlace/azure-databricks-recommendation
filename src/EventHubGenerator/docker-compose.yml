@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  eventhubgenerator:
+    image: eventhubgenerator
+    build:
+      context: .
+      dockerfile: EventHubGenerator/Dockerfile

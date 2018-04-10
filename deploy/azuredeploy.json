@@ -1,0 +1,270 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deployNs": {
+            "type": "String"
+        },
+        "dbricksWorkspaceName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'dbricks', uniqueString(resourceGroup().id))]",
+            "type": "string"
+        },
+        "dbricksLocation": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "string",
+            "metadata": {
+                "description": "Key Vault secret name which references the AD Service Principal password"
+            }
+        },
+        "dbricksTier": {
+            "defaultValue": "premium",
+            "type": "string",
+            "allowedValues": [
+                "premium",
+                "standard"
+            ]
+        },
+        "eventhubsNsName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'eventhubns', uniqueString(resourceGroup().id))]",
+            "type": "String",
+            "metadata": {
+                "description": "Event Hubs namespace name"
+            }
+        },
+        "eventhubsLocation": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+                "description": "Event Hubs location"
+            }
+        },
+        "eventhubsRatingsName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'eventhubRatings', uniqueString(resourceGroup().id))]",
+            "type": "String",
+            "metadata": {
+                "description": "Event Hub containing ratings data"
+            }
+        },
+        "eventhubUsersName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'eventhubUsers', uniqueString(resourceGroup().id))]",
+            "type": "String",
+            "metadata": {
+                "description": "Event Hub containing users data"
+            }
+        },
+        "acrName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'acr', uniqueString(resourceGroup().id))]",
+            "type": "String",
+            "metadata": {
+                "description": "Azure Container Registry name"
+            }
+        },
+        "acrLocation": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+                "description": "Azure Container Registry location"
+            }
+        },
+        "storAccountName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'stor', uniqueString(resourceGroup().id))]",
+            "type": "String",
+            "metadata": {
+                "description": "Storage account name"
+            }
+        },
+        "storLocation": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+                "description": "Storage account location"
+            }
+        },
+        "tsName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'ts', uniqueString(resourceGroup().id))]",
+            "type": "String",
+            "metadata": {
+                "description": "Timeseries insights environment name"
+            }
+        },
+        "tsLocation": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+                "description": "Timeseries insights environment name"
+            }
+        }
+    },
+    "variables": {
+        "managedResourceGroupId": "[concat(subscription().id, '/resourceGroups/', variables('managedResourceGroupName'))]",
+        "managedResourceGroupName": "[concat('databricks-rg-', parameters('dbricksWorkspaceName'), '-', uniqueString(parameters('dbricksWorkspaceName'), resourceGroup().id))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-04-01",
+            "location": "[parameters('dbricksLocation')]",
+            "name": "[parameters('dbricksWorkspaceName')]",
+            "tags": {
+                "displayName": "Databricks Workspace"
+            },
+            "sku": {
+                "name": "[parameters('dbricksTier')]"
+            },
+            "properties": {
+                "ManagedResourceGroupId": "[variables('managedResourceGroupId')]"
+            },
+            "type": "Microsoft.Databricks/workspaces"
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "name": "[parameters('eventhubsNsName')]",
+            "apiVersion": "2017-04-01",
+            "location": "[parameters('eventhubsLocation')]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "isAutoInflateEnabled": true,
+                "maximumThroughputUnits": 20
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "name": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubsRatingsName'))]",
+            "apiVersion": "2017-04-01",
+            "location": "[parameters('eventhubsLocation')]",
+            "scale": null,
+            "properties": {
+                "messageRetentionInDays": 1,
+                "partitionCount": 2,
+                "status": "Active"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubsNsName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "name": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubUsersName'))]",
+            "apiVersion": "2017-04-01",
+            "location": "[parameters('eventhubsLocation')]",
+            "scale": null,
+            "properties": {
+                "messageRetentionInDays": 1,
+                "partitionCount": 2,
+                "status": "Active"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubsNsName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+            "name": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubsRatingsName'), '/manage')]",
+            "apiVersion": "2017-04-01",
+            "location": "[parameters('eventhubsLocation')]",
+            "scale": null,
+            "properties": {
+                "rights": [
+                    "Manage",
+                    "Listen",
+                    "Send"
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubsNsName'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhubsNsName'), parameters('eventhubsRatingsName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+            "name": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubUsersName'), '/manage')]",
+            "apiVersion": "2017-04-01",
+            "location": "[parameters('eventhubsLocation')]",
+            "scale": null,
+            "properties": {
+                "rights": [
+                    "Manage",
+                    "Listen",
+                    "Send"
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubsNsName'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhubsNsName'), parameters('eventhubUsersName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic"
+            },
+            "name": "[parameters('acrName')]",
+            "apiVersion": "2017-10-01",
+            "location": "[parameters('acrLocation')]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "adminUserEnabled": true
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "name": "[parameters('storAccountName')]",
+            "apiVersion": "2017-10-01",
+            "location": "[parameters('storLocation')]",
+            "tags": {
+                "displayname": "Databricks storage"
+            },
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.TimeSeriesInsights/environments",
+            "sku": {
+                "name": "S1",
+                "capacity": 1
+            },
+            "name": "[parameters('tsName')]",
+            "apiVersion": "2017-11-15",
+            "location": "[parameters('tsLocation')]",
+            "scale": null,
+            "properties": {
+                "dataRetentionTime": "P31D",
+                "storageLimitExceededBehavior": "PurgeOldData"
+            },
+            "dependsOn": []
+        }
+    ]
+}

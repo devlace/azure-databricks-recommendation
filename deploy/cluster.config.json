@@ -1,0 +1,14 @@
+{
+    "cluster_name": "democluster",
+    "autoscale": {
+        "min_workers": 1,
+        "max_workers": 5
+    },
+    "spark_version": "4.0.x-scala2.11",
+    "spark_env_vars": {
+      "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+    },
+    "autotermination_minutes": 120,
+    "node_type_id": "Standard_D3_v2",
+    "driver_node_type_id": "Standard_D3_v2"
+}

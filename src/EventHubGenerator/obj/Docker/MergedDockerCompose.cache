@@ -1,0 +1,7 @@
+services:
+  eventhubgenerator:
+    build:
+      context: C:\Users\lalofran\source\repos\EventHubGenerator
+      dockerfile: EventHubGenerator/Dockerfile
+    image: eventhubgenerator
+version: '3.0'
