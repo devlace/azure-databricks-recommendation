@@ -1,12 +1,10 @@
+# Databricks notebook source
+# Set storage mount path
+storage_mount_path = "/mnt/blob_storage"
 
 # COMMAND ----------
 
-storage_account = dbutils.preview.secret.get(scope = "storage_scope", key = "storageAccount")
-storage_key = dbutils.preview.secret.get(scope = "storage_scope", key = "storageKey")
-spark.conf.set("fs.azure.account.key." + storage_account + ".blob.core.windows.net", storage_key)
-
-# COMMAND ----------
-
+# Import dependencies
 import os
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.recommendation import ALS
@@ -14,12 +12,12 @@ from pyspark.sql import Row
 
 # COMMAND ----------
 
-base_dir = os.path.join("wasbs://data@" + storage_account + ".blob.core.windows.net", "ml-latest-small")
+data_base_dir = os.path.join(storage_mount_path, "data", "ml-latest-small")
 
-links = spark.read.csv(os.path.join(base_dir, "links.csv"), header=True, inferSchema=True)
-movies = spark.read.csv(os.path.join(base_dir, "movies.csv"), header=True, inferSchema=True)
-ratings = spark.read.csv(os.path.join(base_dir, "ratings.csv"), header=True, inferSchema=True)
-tags = spark.read.csv(os.path.join(base_dir, "tags.csv"), header=True, inferSchema=True)
+links = spark.read.csv(os.path.join(data_base_dir, "links.csv"), header=True, inferSchema=True)
+movies = spark.read.csv(os.path.join(data_base_dir, "movies.csv"), header=True, inferSchema=True)
+ratings = spark.read.csv(os.path.join(data_base_dir, "ratings.csv"), header=True, inferSchema=True)
+tags = spark.read.csv(os.path.join(data_base_dir, "tags.csv"), header=True, inferSchema=True)
 
 print("Links")
 links.printSchema()
@@ -50,21 +48,10 @@ model = als.fit(training)
 
 # Evaluate the model by computing the RMSE on the test data
 predictions = model.transform(test)
-
-display(predictions)
-
-# COMMAND ----------
-
-# Evaluate Model
 evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating", predictionCol="prediction")
 rmse = evaluator.evaluate(predictions)
 print("Root-mean-square error = " + str(rmse))
 
-
-# COMMAND ----------
-
-# Save model
-model.save("")
 
 # COMMAND ----------
 
@@ -80,3 +67,9 @@ display(userSubsetRecs)
 movies = ratings.select(als.getItemCol()).distinct().limit(3)
 movieSubSetRecs = model.recommendForItemSubset(movies, 10)
 display(movieSubSetRecs)
+
+# COMMAND ----------
+
+# Save model
+model_base_dir = os.path.join(storage_mount_path, "models")
+model.write().overwrite().save(model_base_dir + "/recommender")
