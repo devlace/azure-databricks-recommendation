@@ -1,0 +1,26 @@
+{
+    "name": "Batch - Refit Recommendation Model",
+    "new_cluster": {
+        "spark_version": "4.0.x-scala2.11",
+        "node_type_id": "Standard_D3_v2",
+        "num_workers": 3,
+        "spark_env_vars": {
+            "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+        }
+    },
+    "libraries": [],
+    "timeout_seconds": 3600,
+    "email_notifications": {
+        "on_start": [],
+        "on_success": [],
+        "on_failure": []
+    },
+    "max_retries": 3,
+    "schedule": {
+        "quartz_cron_expression": "0 0 22 ? * *",
+        "timezone_id": "Australia/Victoria"
+    },
+    "notebook_task": {
+        "notebook_path": "/recommender/refit_rec_model"
+    }
+}

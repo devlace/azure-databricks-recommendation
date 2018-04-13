@@ -1,0 +1,27 @@
+{
+  "name": "Streaming - Ingest Data into Blob storage",
+  "new_cluster": {
+    "spark_version": "4.0.x-scala2.11",
+    "node_type_id": "Standard_D3_v2",
+    "num_workers": 3,
+    "spark_env_vars": {
+      "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+    }
+  },
+  "libraries": [
+    {
+      "maven": {
+        "coordinates": "com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.1"
+      }
+    }
+  ],
+  "email_notifications": {
+    "on_start": [],
+    "on_success": [],
+    "on_failure": []
+  },
+  "max_retries": -1,
+  "notebook_task": {
+    "notebook_path": "/recommender/ingest_data"
+  }
+}

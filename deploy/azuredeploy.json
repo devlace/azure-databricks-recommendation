@@ -25,7 +25,7 @@
             ]
         },
         "eventhubsNsName": {
-            "defaultValue": "[concat(parameters('deployNs'), 'eventhubns', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat(parameters('deployNs'), 'ehns', uniqueString(resourceGroup().id))]",
             "type": "String",
             "metadata": {
                 "description": "Event Hubs namespace name"
@@ -39,14 +39,14 @@
             }
         },
         "eventhubsRatingsName": {
-            "defaultValue": "[concat(parameters('deployNs'), 'eventhubRatings', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat(parameters('deployNs'), 'ehRatings', uniqueString(resourceGroup().id))]",
             "type": "String",
             "metadata": {
                 "description": "Event Hub containing ratings data"
             }
         },
         "eventhubUsersName": {
-            "defaultValue": "[concat(parameters('deployNs'), 'eventhubUsers', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat(parameters('deployNs'), 'ehUsers', uniqueString(resourceGroup().id))]",
             "type": "String",
             "metadata": {
                 "description": "Event Hub containing users data"
@@ -97,7 +97,9 @@
     },
     "variables": {
         "managedResourceGroupId": "[concat(subscription().id, '/resourceGroups/', variables('managedResourceGroupName'))]",
-        "managedResourceGroupName": "[concat('databricks-rg-', parameters('dbricksWorkspaceName'), '-', uniqueString(parameters('dbricksWorkspaceName'), resourceGroup().id))]"
+        "managedResourceGroupName": "[concat('databricks-rg-', parameters('dbricksWorkspaceName'), '-', uniqueString(parameters('dbricksWorkspaceName'), resourceGroup().id))]",
+        "eventhubsFullRatingsName": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubsRatingsName'))]",
+        "eventhubsFullUsersName": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubUsersName'))]"
     },
     "resources": [
         {
@@ -135,7 +137,7 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs",
-            "name": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubsRatingsName'))]",
+            "name": "[variables('eventhubsFullRatingsName')]",
             "apiVersion": "2017-04-01",
             "location": "[parameters('eventhubsLocation')]",
             "scale": null,
@@ -150,7 +152,7 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs",
-            "name": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubUsersName'))]",
+            "name": "[variables('eventhubsFullUsersName')]",
             "apiVersion": "2017-04-01",
             "location": "[parameters('eventhubsLocation')]",
             "scale": null,
@@ -165,7 +167,7 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
-            "name": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubsRatingsName'), '/manage')]",
+            "name": "[concat(variables('eventhubsFullRatingsName'), '/manage')]",
             "apiVersion": "2017-04-01",
             "location": "[parameters('eventhubsLocation')]",
             "scale": null,
@@ -183,7 +185,7 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
-            "name": "[concat(parameters('eventhubsNsName'), '/', parameters('eventhubUsersName'), '/manage')]",
+            "name": "[concat(variables('eventhubsFullUsersName'), '/manage')]",
             "apiVersion": "2017-04-01",
             "location": "[parameters('eventhubsLocation')]",
             "scale": null,
@@ -266,5 +268,31 @@
             },
             "dependsOn": []
         }
-    ]
+    ],
+    "outputs": {
+        "dbricksWorkspaceName": {
+            "value": "[parameters('dbricksWorkspaceName')]",
+            "type": "string"
+        },
+        "dbricksLocation": {
+            "value": "[parameters('dbricksLocation')]",
+            "type": "string"
+        },
+        "storAccountName": {
+            "value": "[parameters('storAccountName')]",
+            "type": "string"
+        },
+        "eventhubsNsName": {
+            "value": "[parameters('eventhubsNsName')]",
+            "type": "string"
+        },
+        "eventhubsRatingsName": {
+            "value": "[parameters('eventhubsRatingsName')]",
+            "type": "string"
+        },
+        "eventhubUsersName": {
+            "value": "[parameters('eventhubUsersName')]",
+            "type": "string"
+        }
+    }
 }

@@ -1,0 +1,12 @@
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\bin\Debug\netcoreapp2.0\EventHubGenerator.Ratings.dll.config
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\bin\Debug\netcoreapp2.0\EventHubGenerator.Ratings.deps.json
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\bin\Debug\netcoreapp2.0\EventHubGenerator.Ratings.runtimeconfig.json
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\bin\Debug\netcoreapp2.0\EventHubGenerator.Ratings.runtimeconfig.dev.json
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\bin\Debug\netcoreapp2.0\EventHubGenerator.Ratings.dll
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\obj\Debug\netcoreapp2.0\EventHubGenerator.Ratings.csprojResolveAssemblyReference.cache
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\obj\Debug\netcoreapp2.0\EventHubGenerator.Ratings.csproj.CoreCompileInputs.cache
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\obj\Debug\netcoreapp2.0\EventHubGenerator.Ratings.AssemblyInfoInputs.cache
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\obj\Debug\netcoreapp2.0\EventHubGenerator.Ratings.AssemblyInfo.cs
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\bin\Debug\netcoreapp2.0\EventHubGenerator.Ratings.pdb
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\obj\Debug\netcoreapp2.0\EventHubGenerator.Ratings.dll
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings\obj\Debug\netcoreapp2.0\EventHubGenerator.Ratings.pdb

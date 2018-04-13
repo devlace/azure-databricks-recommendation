@@ -10,9 +10,17 @@ storage_mount_path = "/mnt/blob_storage"
 for mp in dbutils.fs.mounts():
   if mp.mountPoint == storage_mount_path:
     dbutils.fs.unmount(storage_mount_path)
-  
+
+# Refresh mounts
+dbutils.fs.refreshMounts()
+
+# COMMAND ----------
+
 # Mount
 dbutils.fs.mount(
   source = "wasbs://databricks@" + storage_account + ".blob.core.windows.net",
   mount_point = storage_mount_path,
   extra_configs = {"fs.azure.account.key." + storage_account + ".blob.core.windows.net": storage_key})
+
+# Refresh mounts
+dbutils.fs.refreshMounts()
