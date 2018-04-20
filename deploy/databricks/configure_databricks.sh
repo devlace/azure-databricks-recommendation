@@ -86,9 +86,14 @@ _main() {
     echo -e "${NC}"
     yes_or_no "Are you sure you want to continue (Y/N)?" || { exit 1; }
 
-    # Upload notebooks, mount storage and setup up tables
+    # Upload notebooks and dashboards
     echo "Uploading notebooks..."
-    databricks workspace import_dir "../../notebooks" "/recommender" --overwrite
+    databricks workspace import_dir "../../notebooks/notebooks" "/recommender" --overwrite
+    echo "Uploading dashboards..."
+    databricks workspace mkdirs "/recommender_dashboards"
+    databricks workspace import "../../notebooks/dashboards/07_user_dashboard.dbc" "/recommender_dashboards/07_user_dashboard" --format DBC --language PYTHON
+    
+    # , mount storage and setup up tables
     echo "Mounting blob storage. This may take a while as cluster spins up..."
     wait_for_run $(databricks runs submit --json-file "./config/run.mountstorage.config.json" | jq -r ".run_id" )
     echo "Setting up tables. This may take a while as cluster spins up..."
