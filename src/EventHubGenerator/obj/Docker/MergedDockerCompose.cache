@@ -1,7 +1,0 @@
-services:
-  eventhubgenerator.ratings:
-    build:
-      context: C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator
-      dockerfile: EventHubGenerator.Ratings/Dockerfile
-    image: eventhubgeneratorratings
-version: '3.0'
