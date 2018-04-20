@@ -59,7 +59,7 @@ def uploadFolderCsvToBlob(storage_account, storage_key, container, in_dir, blob_
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    logging.basicConfig(level=logging.ERROR, format=log_fmt)
 
     # Get project directory
     project_dir = os.path.join(os.path.dirname(__file__), os.pardir, os.pardir)

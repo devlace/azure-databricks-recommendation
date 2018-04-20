@@ -1,18 +1,17 @@
 # Databricks notebook source
-# Set storage mount path
-storage_mount_path = "/mnt/blob_storage"
-
-# COMMAND ----------
-
 # Import dependencies
 import os
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.recommendation import ALS
 from pyspark.sql import Row
 
+# Set storage mount path
+storage_mount_path = "/mnt/blob_storage"
+
 # COMMAND ----------
 
-ratings = spark.sql("SELECT * FROM ratings")
+# Read in ratings data
+ratings = spark.read.table("rating")
 
 print("Ratings")
 ratings.printSchema()
@@ -21,7 +20,7 @@ ratings.show(5)
 
 # COMMAND ----------
 
-# Split
+# Split data into training and test
 (training, test) = ratings.randomSplit([0.8, 0.2])
 
 # Build the recommendation model using ALS on the training data
@@ -46,6 +45,7 @@ display(userRecs)
 
 # Generate top 10 user recommendations for each movie
 movieRecs = model.recommendForAllItems(10)
+display(movieRecs)
 
 # COMMAND ----------
 
@@ -54,13 +54,17 @@ users = ratings.select(als.getUserCol()).distinct().limit(3)
 userSubsetRecs = model.recommendForUserSubset(users, 10)
 display(userSubsetRecs)
 
-
 # COMMAND ----------
 
 # Generate top 10 user recommendations for a specified set of movies
 movies = ratings.select(als.getItemCol()).distinct().limit(3)
 movieSubSetRecs = model.recommendForItemSubset(movies, 10)
 display(movieSubSetRecs)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Save fitted model to Blob storage
 
 # COMMAND ----------
 

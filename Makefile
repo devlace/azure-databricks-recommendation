@@ -1,4 +1,5 @@
 .PHONY: test_environment requirements deploy_resources data configure_databricks clean lint create_environment
+.INTERMEDIATE: deploy_resources
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -20,34 +21,32 @@ endif
 # COMMANDS                                                                      #
 #################################################################################
 
-## Test python environment is setup correctly
-test_environment:
+test_environment: ## Test python environment is setup correctly 
 	$(PYTHON_INTERPRETER) test_environment.py
 
-## Install Python Dependencies
-requirements: test_environment
+requirements: test_environment ## Install Python Dependencies 
 	pip install -U pip setuptools wheel
 	pip install -r requirements.txt
 
-## Deploy infrastructure
+## Deploy infrastructure 
 deploy_resources: requirements
 	deploy/deploy.sh
 
-## Make Dataset
+## Make Dataset 
 data: deploy_resources
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py
 
-## Configure databricks
-configure_databricks: deploy_resources data
+## Configure databricks 
+deploy: deploy_resources data
 	$(PYTHON_INTERPRETER) deploy/databricks/create_secrets.py
 	deploy/databricks/configure_databricks.sh
 
-## Delete all compiled Python files
+## Delete all compiled Python files 
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
-## Lint using flake8
+## Lint using flake8 
 lint:
 	flake8 src
 

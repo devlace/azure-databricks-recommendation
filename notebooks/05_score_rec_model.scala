@@ -1,4 +1,9 @@
 // Databricks notebook source
+// MAGIC %md
+// MAGIC ## Create Movie recommendations for all users
+
+// COMMAND ----------
+
 import org.apache.spark.ml.recommendation.ALSModel
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._

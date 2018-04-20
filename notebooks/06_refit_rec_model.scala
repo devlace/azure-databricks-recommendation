@@ -1,4 +1,9 @@
 // Databricks notebook source
+// MAGIC %md
+// MAGIC ## Retrain Recommendation model
+
+// COMMAND ----------
+
 // Import dependencies
 import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.ml.recommendation.ALS

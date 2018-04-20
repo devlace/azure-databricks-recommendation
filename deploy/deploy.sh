@@ -45,6 +45,11 @@ timestamp=$(date +%s)
 deploy_name="deployment${timestamp}"
 env_file="../.env"
 
+# Constants
+RED='\033[0;31m'
+ORANGE='\033[0;33m'
+NC='\033[0m'
+
 # Set path
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
@@ -60,11 +65,11 @@ rg_location="${2-}"
 sub_id="${3-}"
 
 while [[ -z $rg_name ]]; do
-    read -rp "Enter Resource Group name: " rg_name
+    read -rp "$(echo -e ${ORANGE}"Enter Resource Group name: "${NC})" rg_name
 done
 
 while [[ -z $rg_location ]]; do
-    read -rp "Enter Azure Location (ei. EAST US 2): " rg_location
+    read -rp "$(echo -e ${ORANGE}"Enter Azure Location (ei. EAST US 2): "${NC})" rg_location
 done
 
 while [[ -z $sub_id ]]; do
@@ -72,12 +77,13 @@ while [[ -z $sub_id ]]; do
     sub_count=$(az account list --output json | jq '. | length')
     if (( $sub_count != 1 )); then
         az account list
-        read -rp "Enter Azure Subscription Id you wish to deploy to (leave blank to select IsDefault): " sub_id
+        read -rp "$(echo -e ${ORANGE}"Enter Azure Subscription Id you wish to deploy to (enter to use Default): "${NC})" sub_id
     fi
     sub_id=$(az account show --output json | jq -r '.id')
 done
 
 # Set account
+echo "Deploying to Subscription: $sub_id"
 az account set --subscription $sub_id
 
 #####################
@@ -102,11 +108,15 @@ fi
 #####################
 # Ask user to configure databricks cli
 dbi_workspace=$(echo $arm_output | jq -r '.properties.outputs.dbricksWorkspaceName.value')
+echo -e "${ORANGE}"
 echo "Configure your databricks cli to connect to the newly created Databricks workspace: ${dbi_workspace}. See here for more info: https://bit.ly/2GUwHcw."
 databricks configure --token
+echo -e "${NC}"
 
 #####################
 # Append to .env file
+
+echo "Retrieving configuration information from newly deployed resources."
 
 # Databricks details
 dbricks_location=$(echo $arm_output | jq -r '.properties.outputs.dbricksLocation.value')
@@ -143,6 +153,7 @@ eh_users_key=$(az eventhubs eventhub authorization-rule keys list \
 
 
 # Build .env file
+echo "Appending configuration to .env file."
 echo "" >> $env_file
 echo "" >> $env_file
 echo "# ------ Configuration from deployment ${deploy_name} -----------" >> $env_file

@@ -1,11 +1,20 @@
 // Databricks notebook source
-// Retrieve storage credentials
+// MAGIC %md
+// MAGIC ## Retrieve storage credentials
+
+// COMMAND ----------
+
 val eventhubNamespace = dbutils.preview.secret.get(scope = "storage_scope", key = "eventhub_namespace")
 val eventhubRatings = dbutils.preview.secret.get(scope = "storage_scope", key = "eventhub_ratings")
 val eventhubRatingKey = dbutils.preview.secret.get(scope = "storage_scope", key = "eventhub_ratings_key")
 
 // Set storage mount path
 val storage_mount_path = "/mnt/blob_storage"
+
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC ## Ingest Data from Event Hubs
 
 // COMMAND ----------
 
@@ -57,6 +66,11 @@ var messageTransformed =
 //   .option("truncate", false)
 //   .start()
 // query.awaitTermination()
+
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC ## Export data to Spark Table (Blob Storage)
 
 // COMMAND ----------
 
