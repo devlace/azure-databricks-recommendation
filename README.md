@@ -1,14 +1,33 @@
 # Introduction
 
-The following is a demo Movie Recommendation System Data pipeline implemented in Azure Databricks. 
+The following is a demo Movie Recommendation System Data pipeline implemented in [Azure Databricks](https://azure.microsoft.com/en-au/services/databricks/). 
 
 # Architecture
 
-Event Hub ratings data is generated via a simple .NET core application running in an Azure Container instance. The ratings data is then ingested via a Spark Streaming (Scala) job within Azure Databricks. The recommendation system makes use of a collaborative filtering model, specifically the Alternating Least Squares (ALS) algorithm implemented in Spark ML and pySpark (Python). The solution also contains two scheduled jobs that demonstrates how one might run these in Production. The first job creates new recommendation for all users in the User table while the second job retrains the model with the newly received ratings data. The solution also demonstrates Sparks Model Persistence feature in which one can load a model in a different language (Scala) from what it was originally saved as (Python). Finally, the data is visualized with parameterize Notebook / Dashboard using Databricks Widgets.
+Movie ratings data is generated via a simple .NET core application running in an [Azure Container instance](https://azure.microsoft.com/en-gb/services/container-instances/) which pushes this into an [Azure Event Hubs](https://azure.microsoft.com/en-gb/services/event-hubs/). The ratings data is then ingested via a [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) (Scala) job within Azure Databricks. The recommendation system makes use of a collaborative filtering model, specifically the [Alternating Least Squares (ALS) algorithm](https://spark.apache.org/docs/2.3.0/ml-collaborative-filtering.html) implemented in Spark ML and pySpark (Python). The solution also contains two scheduled jobs that demonstrates how one might productionize the fitted model. The first job create daily movie recommendations all users in the User table while the second job retrains the model with the newly received ratings data. The solution also demonstrates Sparks [Model Persistence](https://spark.apache.org/docs/latest/ml-pipeline.html#ml-persistence-saving-and-loading-pipelines) feature in which one can load a model in a different language (Scala) from what it was originally saved as (Python). Finally, the data is visualized with parameterize Notebook / Dashboard using [Databricks Widgets](https://docs.azuredatabricks.net/user-guide/notebooks/widgets.html#widget-api).
 
 *DISCLAIMER: The code base is not for Production purposes and is only for demonstration purposes.*
 
 ![Architecture](images/architecture.PNG?raw=true "Architecture")
+
+# Deployment
+
+## Requirements
+
+- [Azure CLI 2.0](https://azure.github.io/projects/clis/)
+- Check the requirements.txt for list of necessary Python packages. 
+
+## Deploy
+
+Ensure you are in the root of the repository and logged in to the Azure cli by running `az login`.
+
+- To deploy the solution, simply run `make deploy` and fill in the prompts.
+- To download required Python packages, run `make requirements`
+- To view additional make commands run `make`
+
+# Data
+
+This solutions makes use of the [MovieLens Dataset](https://movielens.org/)*
 
 # Project Organization
 ------------
@@ -38,25 +57,6 @@ Event Hub ratings data is generated via a simple .NET core application running i
         ├── data           <- Scripts to download or generate data
         │
         └── EventHubGenerator  <- Visual Studio solution EventHub Data Generator (Ratings)
-     
-# Data
-
-This solutions makes use of the [MovieLens Dataset](https://movielens.org/)*
-
-# Deployment
-
-## Requirements
-
-- [Azure CLI 2.0](https://azure.github.io/projects/clis/)
-- Check the requirements.txt for list of necessary Python packages. 
-
-## Deploy
-
-Ensure you are in the root of the repository and logged in to the Azure cli by running `az login`.
-
-- To deploy the solution, simply run `make deploy` and fill in the prompts.
-- To download required Python packages, run `make requirements`
-- To view additional make commands run `make`
 
 --------
 
