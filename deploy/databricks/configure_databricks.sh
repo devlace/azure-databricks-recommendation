@@ -27,7 +27,7 @@
 set -o errexit
 set -o pipefail
 set -o nounset
-set -o xtrace
+# set -o xtrace
 
 # Set path
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
