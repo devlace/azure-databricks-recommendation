@@ -3,7 +3,7 @@
 The following is a demo Movie Recommendation System Data pipeline implemented in Azure Databricks. 
 
 # Architecture
-![Architecture](/Images/architecture.JPG?raw=true "Architecture")
+![Architecture](/images/architecture.PNG?raw=true "Architecture")
 
 Project Organization
 ------------
