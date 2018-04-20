@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  eventhubgenerator.ratings:
+    image: eventhubgeneratorratings
+    build:
+      context: .
+      dockerfile: EventHubGenerator.Ratings/Dockerfile

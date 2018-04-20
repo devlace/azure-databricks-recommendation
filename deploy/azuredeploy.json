@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "deployNs": {
-            "type": "String"
+            "type": "string"
         },
         "dbricksWorkspaceName": {
             "defaultValue": "[concat(parameters('deployNs'), 'dbricks', uniqueString(resourceGroup().id))]",
@@ -26,73 +26,77 @@
         },
         "eventhubsNsName": {
             "defaultValue": "[concat(parameters('deployNs'), 'ehns', uniqueString(resourceGroup().id))]",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Event Hubs namespace name"
             }
         },
         "eventhubsLocation": {
             "defaultValue": "[resourceGroup().location]",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Event Hubs location"
             }
         },
         "eventhubsRatingsName": {
             "defaultValue": "[concat(parameters('deployNs'), 'ehRatings', uniqueString(resourceGroup().id))]",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Event Hub containing ratings data"
             }
         },
         "eventhubUsersName": {
             "defaultValue": "[concat(parameters('deployNs'), 'ehUsers', uniqueString(resourceGroup().id))]",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Event Hub containing users data"
             }
         },
-        "acrName": {
-            "defaultValue": "[concat(parameters('deployNs'), 'acr', uniqueString(resourceGroup().id))]",
-            "type": "String",
-            "metadata": {
-                "description": "Azure Container Registry name"
-            }
-        },
-        "acrLocation": {
-            "defaultValue": "[resourceGroup().location]",
-            "type": "String",
-            "metadata": {
-                "description": "Azure Container Registry location"
-            }
-        },
         "storAccountName": {
             "defaultValue": "[concat(parameters('deployNs'), 'stor', uniqueString(resourceGroup().id))]",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Storage account name"
             }
         },
         "storLocation": {
             "defaultValue": "[resourceGroup().location]",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Storage account location"
             }
         },
-        "tsName": {
-            "defaultValue": "[concat(parameters('deployNs'), 'ts', uniqueString(resourceGroup().id))]",
-            "type": "String",
+        "ratingsContainerName": {
+            "defaultValue": "[concat(parameters('deployNs'), 'ciratings', uniqueString(resourceGroup().id))]",
+            "type": "string",
             "metadata": {
-                "description": "Timeseries insights environment name"
+                "description": "Storage account location"
             }
         },
-        "tsLocation": {
-            "defaultValue": "[resourceGroup().location]",
-            "type": "String",
+        "ratingsContainerImage": {
+            "defaultValue": "devlace/eventhubgeneratorratings:latest",
+            "type": "string",
             "metadata": {
-                "description": "Timeseries insights environment name"
+                "description": "Docker Image location of the EventHub Data Generator (Ratings)"
             }
+        },
+        "ratingsContainerCpu": {
+            "defaultValue": 1,
+            "type": "int",
+            "metadata": {
+                "description": "Container instance running EventHub Data Generator (Ratings) # of cpus"
+            }
+        },
+        "ratingsContainerMemoryGb": {
+            "defaultValue": 2,
+            "type": "int",
+            "metadata": {
+                "description": "Container instance running EventHub Data Generator (Ratings) RAM in Gb"
+            }
+        },
+        "ratingFilePath": {
+            "defaultValue": "ml-latest-small/ratings.csv",
+            "type": "string"
         }
     },
     "variables": {
@@ -202,22 +206,6 @@
             ]
         },
         {
-            "type": "Microsoft.ContainerRegistry/registries",
-            "sku": {
-                "name": "Basic",
-                "tier": "Basic"
-            },
-            "name": "[parameters('acrName')]",
-            "apiVersion": "2017-10-01",
-            "location": "[parameters('acrLocation')]",
-            "tags": {},
-            "scale": null,
-            "properties": {
-                "adminUserEnabled": true
-            },
-            "dependsOn": []
-        },
-        {
             "type": "Microsoft.Storage/storageAccounts",
             "sku": {
                 "name": "Standard_LRS",
@@ -253,20 +241,52 @@
             }
         },
         {
-            "type": "Microsoft.TimeSeriesInsights/environments",
-            "sku": {
-                "name": "S1",
-                "capacity": 1
-            },
-            "name": "[parameters('tsName')]",
-            "apiVersion": "2017-11-15",
-            "location": "[parameters('tsLocation')]",
-            "scale": null,
+            "name": "[parameters('ratingsContainerName')]",
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2017-08-01-preview",
+            "location": "[resourceGroup().location]",
             "properties": {
-                "dataRetentionTime": "P31D",
-                "storageLimitExceededBehavior": "PurgeOldData"
+                "containers": [
+                    {
+                        "name": "[parameters('ratingsContainerName')]",
+                        "properties": {
+                            "image": "[parameters('ratingsContainerImage')]",
+                            "resources": {
+                                "requests": {
+                                    "cpu": "[parameters('ratingsContainerCpu')]",
+                                    "memoryInGb": "[parameters('ratingsContainerMemoryGb')]"
+                                }
+                            },
+                            "environmentVariables": [
+                                {
+                                    "name": "EVENTHUB_CONNECTION_STRING",
+                                    "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventhubsNsName'), parameters('eventhubsRatingsName'), 'manage'), '2017-04-01').primaryConnectionString]"
+                                },
+                                {
+                                    "name": "STORAGE_CONTAINER_STRING",
+                                    "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storAccountName')), '2017-10-01').keys[0].value)]"
+                                },
+                                {
+                                    "name": "STORAGE_CONTAINER",
+                                    "value": "databricks"
+                                },
+                                {
+                                    "name": "RATINGS_FILEPATH",
+                                    "value": "[parameters('ratingFilePath')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "osType": "Linux",
+                "restartPolicy": "Always"
             },
-            "dependsOn": []
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubsNsName'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhubsNsName'), parameters('eventhubsRatingsName'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventhubsNsName'), parameters('eventhubsRatingsName'), 'manage')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storAccountName'))]"
+            ]
         }
     ],
     "outputs": {

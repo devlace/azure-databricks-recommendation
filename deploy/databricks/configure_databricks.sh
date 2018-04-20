@@ -93,9 +93,10 @@ _main() {
     wait_for_run $(databricks runs submit --json-file "./config/run.mountstorage.config.json" | jq -r ".run_id" )
     echo "Setting up tables. This may take a while as cluster spins up..."
     wait_for_run $(databricks runs submit --json-file "./config/run.setuptables.config.json" | jq -r ".run_id" )
+    echo "Training initial model. This may take a while as cluster spins up..."
+    wait_for_run $(databricks runs submit --json-file "./config/run.trainmodel.config.json" | jq -r ".run_id" )
 
     # Schedule and run jobs
-    databricks jobs run-now --job-id $(databricks jobs create --json-file "./config/job.trainmodel.config.json" | jq ".job_id")
     databricks jobs run-now --job-id $(databricks jobs create --json-file "./config/job.scoremodel.config.json" | jq ".job_id")
     databricks jobs run-now --job-id $(databricks jobs create --json-file "./config/job.refitmodel.config.json" | jq ".job_id")
     databricks jobs run-now --job-id $(databricks jobs create --json-file "./config/job.ingestdata.config.json" | jq ".job_id")
@@ -109,6 +110,11 @@ _main() {
         echo "Creating cluster ${cluster_name}..."
         databricks clusters create --json-file $cluster_config
     fi
+
+    # Attach library
+    cluster_id=$(databricks clusters list | awk '/'$cluster_name'/ {print $1}')
+    databricks libraries install --maven-coordinates com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.1 --cluster-id $cluster_id
+
 }
 
 _main

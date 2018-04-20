@@ -22,6 +22,6 @@
   },
   "max_retries": -1,
   "notebook_task": {
-    "notebook_path": "/recommender/ingest_data"
+    "notebook_path": "/recommender/03_ingest_data"
   }
 }

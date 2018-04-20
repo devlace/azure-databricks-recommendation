@@ -29,14 +29,14 @@ requirements: test_environment ## Install Python Dependencies
 	pip install -r requirements.txt
 
 ## Deploy infrastructure 
-deploy_resources: requirements
+deploy_resources: 
 	deploy/deploy.sh
 
 ## Make Dataset 
 data: deploy_resources
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py
 
-## Configure databricks 
+## Deploys entire solution
 deploy: deploy_resources data
 	$(PYTHON_INTERPRETER) deploy/databricks/create_secrets.py
 	deploy/databricks/configure_databricks.sh

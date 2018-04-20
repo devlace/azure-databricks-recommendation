@@ -1,4 +1,9 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC # Train Recommendation Model
+
+# COMMAND ----------
+
 # Import dependencies
 import os
 from pyspark.ml.evaluation import RegressionEvaluator
@@ -10,6 +15,11 @@ storage_mount_path = "/mnt/blob_storage"
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Read movie ratings data
+
+# COMMAND ----------
+
 # Read in ratings data
 ratings = spark.read.table("rating")
 
@@ -17,6 +27,14 @@ print("Ratings")
 ratings.printSchema()
 ratings.show(5)
 
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Build recommendation model using Alternating Least Square (ALS)
+# MAGIC This is a type Collaborative Filtering model which lends itself to parallelization.
+# MAGIC 
+# MAGIC Collaborative filtering, also referred to as social filtering, filters information by using the recommendations of other people. It is based on the idea that people who agreed in their evaluation of certain items in the past are likely to agree again in the future. A person who wants to see a movie for example, might ask for recommendations from friends. The recommendations of some friends who have similar interests are trusted more than recommendations from others. This information is used in the decision on which movie to see. 
+# MAGIC See here for more information: http://recommender-systems.org/collaborative-filtering/
 
 # COMMAND ----------
 
@@ -34,6 +52,11 @@ evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating", prediction
 rmse = evaluator.evaluate(predictions)
 print("Root-mean-square error = " + str(rmse))
 
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Generate recommendations
 
 # COMMAND ----------
 
@@ -64,7 +87,7 @@ display(movieSubSetRecs)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Save fitted model to Blob storage
+# MAGIC ### Save fitted model to Blob storage
 
 # COMMAND ----------
 

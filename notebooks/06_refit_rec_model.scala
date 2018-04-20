@@ -13,11 +13,24 @@ import java.text.SimpleDateFormat
 // Set storage mount path
 val storage_mount_path = "/mnt/blob_storage"
 
-//data_base_dir = os.path.join(storage_mount_path, "data", "ml-latest-small")
-//val data_base_dir
-val ratings = spark.sql("SELECT * FROM ratings")
+// COMMAND ----------
 
-// build model
+// MAGIC %md
+// MAGIC ### Read in ratings data
+
+// COMMAND ----------
+
+// Read in ratings
+val ratings = spark.read.table("rating")
+display(ratings)
+
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC ### Re-fit ALS model
+
+// COMMAND ----------
+
 val als = new ALS()
   .setMaxIter(5)
   .setRegParam(0.01)
@@ -26,6 +39,11 @@ val als = new ALS()
   .setRatingCol("rating")
 val model = als.fit(ratings)
 
-// Save model
-val timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance.getTime())
-model.write.overwrite.save(storage_mount_path + s"/models/recommender/v_$timestamp")
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC ### Save model
+
+// COMMAND ----------
+
+model.write.overwrite.save(storage_mount_path + s"/models/recommender/latest")

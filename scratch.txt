@@ -31,7 +31,7 @@ az acr credential show --name laceeusacr01 --query "passwords[0].value"
 az container create \
     --resource-group myResourceGroup \
     --name aci-tutorial-app \
-    --image <acrLoginServer>/aci-tutorial-app:v1 \
+    --image devlace/eventhubgeneratorratings:latest \
     --cpu 1 --memory 1 \
     --registry-username <acrName> \
     --registry-password <acrPassword> \

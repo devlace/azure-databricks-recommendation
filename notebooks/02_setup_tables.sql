@@ -55,6 +55,9 @@ DROP TABLE rating_temp;
 -- Refresh
 REFRESH TABLE rating;
 
+-- Discover partitions
+MSCK REPAIR TABLE rating;
+
 SELECT * FROM rating LIMIT 100;
 
 -- COMMAND ----------

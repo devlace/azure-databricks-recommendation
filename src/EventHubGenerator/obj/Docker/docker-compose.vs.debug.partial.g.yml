@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  eventhubgenerator.ratings:
+    image: eventhubgeneratorratings:dev
+    environment:
+      - NUGET_FALLBACK_PACKAGES=/root/.nuget/fallbackpackages;/root/.nuget/fallbackpackages2
+    volumes:
+      - C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\EventHubGenerator.Ratings:/app
+      - C:\Users\lalofran\vsdbg\vs2017u5:/remote_debugger:ro
+      - C:\Users\lalofran\.nuget\packages\:/root/.nuget/packages:ro
+      - C:\Program Files (x86)\Microsoft SDKs\NuGetPackagesFallback\:/root/.nuget/fallbackpackages:ro
+      - C:\Program Files\dotnet\sdk\NuGetFallbackFolder:/root/.nuget/fallbackpackages2:ro
+    entrypoint: tail -f /dev/null
+    labels:
+      com.microsoft.visualstudio.debuggee.program: "dotnet"
+      com.microsoft.visualstudio.debuggee.arguments: " --additionalProbingPath /root/.nuget/packages --additionalProbingPath /root/.nuget/fallbackpackages --additionalProbingPath /root/.nuget/fallbackpackages2  bin/Debug/netcoreapp2.0/EventHubGenerator.Ratings.dll"
+      com.microsoft.visualstudio.debuggee.workingdirectory: "/app"
+      com.microsoft.visualstudio.debuggee.killprogram: "/bin/bash -c \"if PID=$$(pidof -x dotnet); then kill $$PID; fi\""

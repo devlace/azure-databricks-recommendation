@@ -79,7 +79,10 @@ while [[ -z $sub_id ]]; do
         az account list
         read -rp "$(echo -e ${ORANGE}"Enter Azure Subscription Id you wish to deploy to (enter to use Default): "${NC})" sub_id
     fi
-    sub_id=$(az account show --output json | jq -r '.id')
+    # If still empty then user selected IsDefault
+    if [[ -z $sub_id ]]; then
+        sub_id=$(az account show --output json | jq -r '.id')
+    fi
 done
 
 # Set account
@@ -104,6 +107,8 @@ if [[ -z $arm_output ]]; then
     echo >&2 "ARM deployment failed." 
     exit 1
 fi
+
+
 
 #####################
 # Ask user to configure databricks cli
@@ -167,3 +172,5 @@ echo "EVENTHUB_USERS_KEY=${eh_users_key}" >> $env_file
 echo "DBRICKS_DOMAIN=${dbricks_location}.azuredatabricks.net" >> $env_file
 echo "DBRICKS_TOKEN=${dbi_token}" >> $env_file
 echo "# --------------------------------------------------------------" >> $env_file
+
+

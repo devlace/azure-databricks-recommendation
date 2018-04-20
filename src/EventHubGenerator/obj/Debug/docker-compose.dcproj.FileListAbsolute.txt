@@ -1,0 +1,1 @@
+C:\Users\lalofran\OneDrive - Microsoft\_Conf_GlobalAzureBootcamp2018\CODE\src\EventHubGenerator\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache

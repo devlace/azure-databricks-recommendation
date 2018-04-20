@@ -11,6 +11,6 @@
     "libraries": [],
     "timeout_seconds": 3600,
     "notebook_task": {
-        "notebook_path": "/recommender/train_rec_model"
+        "notebook_path": "/recommender/04_train_rec_model"
     }
 }

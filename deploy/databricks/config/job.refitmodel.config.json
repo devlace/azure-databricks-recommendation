@@ -21,6 +21,6 @@
         "timezone_id": "Australia/Victoria"
     },
     "notebook_task": {
-        "notebook_path": "/recommender/refit_rec_model"
+        "notebook_path": "/recommender/06_refit_rec_model"
     }
 }

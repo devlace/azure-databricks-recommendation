@@ -11,10 +11,22 @@ import org.apache.spark.sql.types._
 // Set storage mount path
 val storageMountPath = "/mnt/blob_storage"
 
-// TODO update to capture latest versioned model
-val modelVersion = "v_20180412_103448"
-val modelBaseDir = s"$storageMountPath/models/recommender/$modelVersion"
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC ### Load trained model
+
+// COMMAND ----------
+
+val modelBaseDir = s"$storageMountPath/models/recommender/latest"
 val model = ALSModel.read.load(modelBaseDir)
+
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC ### Generate recommendations
+
+// COMMAND ----------
 
 // Generate top 10 movie recommendations for each user
 val userRecs = model.recommendForAllUsers(10)
@@ -24,8 +36,15 @@ var userRecsFlatten = userRecs
   .select($"user_id", 
           $"recommendations.movie_id", 
           $"recommendations.rating", 
-          lit(modelVersion).alias("model_ver_used"), 
+          lit("latest").alias("model_ver_used"), 
           current_timestamp().alias("created_at"))
+
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC ### Save recommendations
+
+// COMMAND ----------
 
 // Insert into table
 userRecsFlatten.write.insertInto("recommendation")

@@ -14,7 +14,6 @@ namespace EventHubGenerator.Ratings
     class Program
     {
         private static EventHubClient _eventHubClient;
-        private const string _ehEntityPath = "laceeh02";
 
         static void Main(string[] args)
         {
@@ -23,41 +22,54 @@ namespace EventHubGenerator.Ratings
 
         private static async Task MainAsync(string[] args)
         {
-            //// Setup EventHub
-            //string EhConnectionString = Environment.GetEnvironmentVariable("EVENTHUB_CONNECTION_STRING");
-            string EhConnectionString = "Endpoint=sb://laceeuseh01.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TmBWRev8VoN9UtVP8OpogzWzT8HJJdkspLpBsFfZ8LQ=";
-            var connectionStringBuilder = new EventHubsConnectionStringBuilder(EhConnectionString)
-            {
-                EntityPath = _ehEntityPath
-            };
+            // IMPORTANT NOTE!
+            // To properly secure secrets for Docker containers in production, mount a secret volumne
+            // https://docs.microsoft.com/en-us/azure/container-instances/container-instances-volume-secret
+            // The following is just for demo purposes!
+
+            // Setup EventHub
+            string EhConnectionString = Environment.GetEnvironmentVariable("EVENTHUB_CONNECTION_STRING");
+            var connectionStringBuilder = new EventHubsConnectionStringBuilder(EhConnectionString);
             _eventHubClient = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
 
             // Setup storage account
-            //string storageConnectionString = Environment.GetEnvironmentVariable("storageconnectionstring");
-            //string storageContainer = Environment.GetEnvironmentVariable("storage_container");
-            string storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=laceeusstor01;AccountKey=HKx5gs8kTZVJLQc/et0pSLaX4OiGkRsh9a66LC9fObDlL/Jg4s/iEDsklV5aRucLrCQKOFXgwfD6xYIG/a4Lkg==;EndpointSuffix=core.windows.net";
-            string storageContainer = "data";
-            string filePath = "ml-latest-small/ratings.csv";
+            string storageConnectionString = Environment.GetEnvironmentVariable("STORAGE_CONTAINER_STRING");
+            string storageContainer = Environment.GetEnvironmentVariable("STORAGE_CONTAINER");
+            string filePath = Environment.GetEnvironmentVariable("RATINGS_FILEPATH");
 
-            foreach (var line in ReadBlobStorageFile(storageConnectionString, storageContainer, filePath))
+            while (true)
             {
-                var userRating = ToUserRating(line);
-                if (userRating != null)
+                Console.WriteLine("Start sending data to Event Hubs");
+                try
                 {
-                    var json = JsonConvert.SerializeObject(userRating);
-                    Console.WriteLine(json);
-                    await _eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(json)));
+                    foreach (var line in ReadBlobStorageFile(storageConnectionString, storageContainer, filePath))
+                    {
+                        var userRating = ToUserRating(line);
+                        if (userRating != null)
+                        {
+                            var json = JsonConvert.SerializeObject(userRating);
+                            Console.WriteLine(json);
+                            await _eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(json)));
+                        }
+
+                        // Delay
+                        await Task.Delay(1000);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred: {ex.ToString()}");
                 }
 
                 // Delay
-                await Task.Delay(1000);
+                Console.WriteLine("Sleeping for one minute...");
+                await Task.Delay(60000); //One minute
             }
-
-            // Cleanup
-            await _eventHubClient.CloseAsync();
-
-            Console.WriteLine("Press ENTER to exit.");
-            Console.ReadLine();
+            
+            // Cleanup / Dev purposes
+            //await _eventHubClient.CloseAsync();
+            //Console.WriteLine("Press ENTER to exit.");
+            //Console.ReadLine();
         }
 
         private static IEnumerable<string> ReadBlobStorageFile(string connectionString, string container, string filePath)
@@ -74,7 +86,7 @@ namespace EventHubGenerator.Ratings
                 // Create the CloudBlobClient that represents the Blob storage endpoint for the storage account.
                 CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
                 CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(container);
-
+                
                 // List the blobs in the container.
                 CloudBlob blob = blobContainer.GetBlobReference(filePath);
                 using (var stream = blob.OpenReadAsync())
@@ -107,13 +119,13 @@ namespace EventHubGenerator.Ratings
                     UserId = Convert.ToInt32(strSplit[0]),
                     MovieId = Convert.ToInt32(strSplit[1]),
                     Rating = Convert.ToDouble(strSplit[2]),
-                    Timestamp = nowUnixTimestamp() //Convert.ToInt32(strSplit[3])
+                    Timestamp = nowUnixTimestamp() 
                 };
                 return userRating;
             }
             catch(Exception ex)
             {
-                //TODO more robust
+                Console.WriteLine($"An error occurred parsing UserRating data: {ex.ToString()}");
                 return null;
             }
             

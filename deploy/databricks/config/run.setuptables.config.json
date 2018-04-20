@@ -11,6 +11,6 @@
     "libraries": [],
     "timeout_seconds": 3600,
     "notebook_task": {
-        "notebook_path": "/recommender/setup_tables"
+        "notebook_path": "/recommender/02_setup_tables"
     }
 }
