@@ -95,7 +95,7 @@
             }
         },
         "ratingFilePath": {
-            "defaultValue": "ml-latest-small/ratings.csv",
+            "defaultValue": "rawdata/ml-latest-small/ratings.csv",
             "type": "string"
         }
     },
