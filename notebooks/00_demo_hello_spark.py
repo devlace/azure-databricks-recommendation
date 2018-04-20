@@ -34,6 +34,20 @@ df.printSchema()
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ### Let's mix in some Spark SQL
+
+# COMMAND ----------
+
+df.createOrReplaceTempView("temp_df")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM temp_df
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ### Transformation
 
 # COMMAND ----------

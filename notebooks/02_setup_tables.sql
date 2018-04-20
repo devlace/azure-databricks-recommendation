@@ -35,7 +35,7 @@ CREATE TABLE rating_temp
   `timestamp` long
 )
 USING CSV
-LOCATION '/mnt/blob_storage/rawdata/ml-latest-small/ratings.csv'
+LOCATION '/mnt/blob_storage/rawdata/ml-latest/ratings.csv'
 OPTIONS ("header"="true");
 
 -- Insert data into table
@@ -99,7 +99,7 @@ CREATE TABLE movies_temp
   genre string
 )
 USING CSV
-LOCATION '/mnt/blob_storage/rawdata/ml-latest-small/movies.csv'
+LOCATION '/mnt/blob_storage/rawdata/ml-latest/movies.csv'
 OPTIONS ("header"="true");
 
 INSERT INTO movie
@@ -142,7 +142,7 @@ CREATE TABLE tag_temp
   `timestamp` long
 )
 USING CSV
-LOCATION '/mnt/blob_storage/rawdata/ml-latest-small/tags.csv'
+LOCATION '/mnt/blob_storage/rawdata/ml-latest/tags.csv'
 OPTIONS ("header"="true");
 
 INSERT INTO tag
@@ -184,7 +184,7 @@ CREATE TABLE link_temp
   tmdb_id int
 )
 USING CSV
-LOCATION '/mnt/blob_storage/rawdata/ml-latest-small/links.csv'
+LOCATION '/mnt/blob_storage/rawdata/ml-latest/links.csv'
 OPTIONS ("header"="true");
 
 INSERT INTO link

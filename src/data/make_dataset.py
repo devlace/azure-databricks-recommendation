@@ -7,8 +7,13 @@ from urllib.request import urlretrieve
 from azure.storage.blob import BlockBlobService
 from azure.storage.blob import ContentSettings
 
+# Small dataset for testing
 movieset_data_url = "http://files.grouplens.org/datasets/movielens/ml-latest-small.zip"
-blob_out_dir = 'rawdata/ml-latest-small'
+
+# Large dataset
+#movieset_data_url = "http://files.grouplens.org/datasets/movielens/ml-latest.zip"
+
+blob_out_dir = 'rawdata/ml-latest'
 container = 'databricks'
 
 def main(project_dir):
