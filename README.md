@@ -26,7 +26,7 @@ Ensure you are in the root of the repository and logged in to the Azure cli by r
 
 - The following works with [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 - Clone this repository
-- `cd azure-databricks-reccomendation`
+- `cd azure-databricks-recommendation`
 - `virtualenv .`  This creates a python virtual environment to work in.
 - `source bin/activate`  This activates the virtual environment.
 - `make requirements`. This installs python dependencies in the virtual environment.
