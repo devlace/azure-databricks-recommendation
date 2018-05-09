@@ -24,10 +24,11 @@ Ensure you are in the root of the repository and logged in to the Azure cli by r
 
 ## Development environment
 
+- The following works with [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 - Clone this repository
 - `cd azure-databricks-reccomendation`
-- `virtualenv .`
-- `source bin/activate`. This creates a python virtual environment to work in.
+- `virtualenv .`  This creates a python virtual environment to work in.
+- `source bin/activate`  This activates the virtual environment.
 - `make requirements`. This installs python dependencies in the virtual environment.
 - WARNING: The line endings of the two shell scripts `deploy.sh` and `configure_databricks.sh` may cause errors in your interpreter. You can change the line endings by opening the files in VS Code, and changing in the botton right of the editor.
 
