@@ -12,18 +12,31 @@ Movie ratings data is generated via a simple .NET core application running in an
 
 # Deployment
 
+Ensure you are in the root of the repository and logged in to the Azure cli by running `az login`.
+
 ## Requirements
 
 - [Azure CLI 2.0](https://azure.github.io/projects/clis/)
+- [Python virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) 
 - [jq tool](https://stedolan.github.io/jq/download/)
-- Check the requirements.txt for list of necessary Python packages. 
+- Check the requirements.txt for list of necessary Python packages. (will be installed by `make requirements`)
+
+
+## Development environment
+
+- Clone this repository
+- `cd azure-databricks-reccomendation`
+- `virtualenv .`
+- `source bin/activate`. This creates a python virtual environment to work in.
+- `make requirements`. This installs python dependencies in the virtual environment.
+
+## Make the data
+
+- `make data`
 
 ## Deploy
 
-Ensure you are in the root of the repository and logged in to the Azure cli by running `az login`.
-
 - To deploy the solution, simply run `make deploy` and fill in the prompts.
-- To download required Python packages, run `make requirements`
 - To view additional make commands run `make`
 
 # Data
