@@ -20,9 +20,10 @@ def main(project_dir):
     """ Downloads data and uploads to blob storage
     """
     logger = logging.getLogger(__name__)
+    dir_path = os.path.dirname(os.path.realpath(__file__)) # gets this file's directory
 
     # Construct paths
-    raw_data_dir = os.path.join(project_dir, 'data', 'raw')
+    raw_data_dir = os.path.join(dir_path, 'raw')
     zip_file = os.path.join(raw_data_dir, "data.zip")
 
     # Download
