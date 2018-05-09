@@ -15,6 +15,7 @@ Movie ratings data is generated via a simple .NET core application running in an
 ## Requirements
 
 - [Azure CLI 2.0](https://azure.github.io/projects/clis/)
+- [jq tool](https://stedolan.github.io/jq/download/)
 - Check the requirements.txt for list of necessary Python packages. 
 
 ## Deploy
