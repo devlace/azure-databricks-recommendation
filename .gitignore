@@ -434,3 +434,6 @@ bundles/
 vendor/pkg/
 pyenv
 Vagrantfile
+src/data/raw/
+
+include/

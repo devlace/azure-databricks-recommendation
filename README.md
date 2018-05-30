@@ -12,17 +12,31 @@ Movie ratings data is generated via a simple .NET core application running in an
 
 # Deployment
 
+Ensure you are in the root of the repository and logged in to the Azure cli by running `az login`.
+
 ## Requirements
 
 - [Azure CLI 2.0](https://azure.github.io/projects/clis/)
-- Check the requirements.txt for list of necessary Python packages. 
+- [Python virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) 
+- [jq tool](https://stedolan.github.io/jq/download/)
+- Check the requirements.txt for list of necessary Python packages. (will be installed by `make requirements`)
 
-## Deploy
 
-Ensure you are in the root of the repository and logged in to the Azure cli by running `az login`.
+## Development environment
+
+- The following works with [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+- Clone this repository
+- `cd azure-databricks-recommendation`
+- `virtualenv .`  This creates a python virtual environment to work in.
+- `source bin/activate`  This activates the virtual environment.
+- `make requirements`. This installs python dependencies in the virtual environment.
+- WARNING: The line endings of the two shell scripts `deploy.sh` and `configure_databricks.sh` may cause errors in your interpreter. You can change the line endings by opening the files in VS Code, and changing in the botton right of the editor.
+
+## Deploy Entire Solution
 
 - To deploy the solution, simply run `make deploy` and fill in the prompts.
-- To download required Python packages, run `make requirements`
+- When prompted for a Databricks Host, enter the full name of your databricks workspace host, e.g. `https://southeastasia.azuredatabricks.net` 
+- When prompted for a token, you can [generate a new token](https://docs.databricks.com/api/latest/authentication.html) in the databricks workspace.
 - To view additional make commands run `make`
 
 # Data
