@@ -86,12 +86,20 @@ _main() {
     echo -e "${NC}"
     yes_or_no "Are you sure you want to continue (Y/N)?" || { exit 1; }
 
-    # Upload notebooks and dashboards
+    # Upload notebooks
     echo "Uploading notebooks..."
     databricks workspace import_dir "../../notebooks/notebooks" "/recommender" --overwrite
+
+    # Upload dashboards
+    # Because --overwrite cannot be used DBC formats, manually overwrite
     echo "Uploading dashboards..."
+    if [[ -n $(databricks workspace ls "/" | grep "recommender_dashboards") ]]; then
+        echo "Found existing dashboard, deleting and re-uploading..."
+        databricks workspace rm "/recommender_dashboards" --recursive
+    fi
     databricks workspace mkdirs "/recommender_dashboards"
-    databricks workspace import "../../notebooks/dashboards/07_user_dashboard.dbc" "/recommender_dashboards/07_user_dashboard" --format DBC --language PYTHON
+    databricks workspace import "../../notebooks/dashboards/07_user_dashboard.dbc" "/recommender_dashboards/07_user_dashboard" \
+        --format DBC --language PYTHON # --overwrite, cannot be used for DBC format
     
     # , mount storage and setup up tables
     echo "Mounting blob storage. This may take a while as cluster spins up..."
