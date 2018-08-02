@@ -47,9 +47,9 @@ wait_for_run () {
         result_state=$(databricks runs get --run-id $mount_run_id | jq -r ".state.result_state")
         if [[ $result_state == "SUCCESS" || $result_state == "SKIPPED" ]]; then
             break;
-        elif [[ $life_cycle_status == "INTERNAL_ERROR" ]]; then
-            err_msg=$(echo run_status | jq -r ".state.state_message")
-            echo -e "${RED}Error while running ${mount_run_id}: ${err_msg} ${NC}"
+        elif [[ $life_cycle_status == "INTERNAL_ERROR" || $life_cycle_status == "FAILED" ]]; then
+            state_message=$(databricks runs get --run-id $mount_run_id | jq -r ".state.state_message")
+            echo -e "${RED}Error while running ${mount_run_id}: ${state_message} ${NC}"
             exit 1
         else 
             echo "Waiting for run ${mount_run_id} to finish..."
@@ -78,6 +78,7 @@ yes_or_no () {
     done
 }
 
+
 _main() {
     echo -e "${ORANGE}"
     echo -e "!! -- WARNING --!!"
@@ -85,6 +86,9 @@ _main() {
     echo -e "This will also drop and reload data in rating and recommendation Tables."
     echo -e "${NC}"
     yes_or_no "Are you sure you want to continue (Y/N)?" || { exit 1; }
+
+    # Configuring secrets
+
 
     # Upload notebooks
     echo "Uploading notebooks..."

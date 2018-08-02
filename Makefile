@@ -38,7 +38,7 @@ data: deploy_resources
 
 ## Deploys entire solution
 deploy: deploy_resources data
-	$(PYTHON_INTERPRETER) deploy/databricks/create_secrets.py
+	deploy/databricks/create_secrets.sh
 	deploy/databricks/configure_databricks.sh
 
 ## Deploys entire solutions using Docker
