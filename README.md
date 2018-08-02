@@ -10,6 +10,14 @@ Movie ratings data is generated via a simple .NET core application running in an
 
 ![Architecture](images/architecture.PNG?raw=true "Architecture")
 
+## Dashboard
+
+The following shows the Movie Recommendations dashboard by User Id.
+
+![Dashboard](images/dashboard.PNG?raw=true "Dashboard")
+
+To access the Dashboard, go to `Workspace > recommender_dashboard > 07_user_dashboard` then select `View > User Recommendation Dashboard`
+
 # Deployment
 
 Ensure you are in the root of the repository and logged in to the Azure cli by running `az login`.
@@ -20,6 +28,8 @@ Ensure you are in the root of the repository and logged in to the Azure cli by r
 - [Python virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) 
 - [jq tool](https://stedolan.github.io/jq/download/)
 - Check the requirements.txt for list of necessary Python packages. (will be installed by `make requirements`)
+  
+  Or Alternatively, you can use the Docker to deploy the solution in whcih case, you only need Docker.
 
 
 ## Development environment
@@ -61,6 +71,10 @@ This solutions makes use of the [MovieLens Dataset](https://movielens.org/)*
     │   └── databricks     <- Deployment artifacts in relation to the Databricks workspace
     │   │
     │   └── deploy.sh      <- Deployment script to deploy all Azure Resources
+    │   │
+    │   └── azuredeploy.json <- Azure ARM template w/ .parameters file
+    │   │
+    │   └── Dockerfile     <- Dockerfile for deployment
     │
     ├── notebooks          <- Azure Databricks Jupyter notebooks. 
     │
