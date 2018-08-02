@@ -1,4 +1,3 @@
 python-dotenv>=0.5.1
 databricks-cli
-azure.storage.blob
 azure-cli

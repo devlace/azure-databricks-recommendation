@@ -41,6 +41,11 @@ deploy: deploy_resources data
 	$(PYTHON_INTERPRETER) deploy/databricks/create_secrets.py
 	deploy/databricks/configure_databricks.sh
 
+## Deploys entire solutions using Docker
+deploy_w_docker:
+	docker build -t devlace/azdatabricksrecommend -f deploy/Dockerfile .
+	docker run -it devlace/azdatabricksrecommend
+
 ## Delete all compiled Python files 
 clean:
 	find . -type f -name "*.py[co]" -delete

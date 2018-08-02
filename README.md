@@ -34,7 +34,11 @@ Ensure you are in the root of the repository and logged in to the Azure cli by r
 
 ## Deploy Entire Solution
 
-- To deploy the solution, simply run `make deploy` and fill in the prompts.
+- To deploy the solution, simply run `make deploy` and fill in the prompts. 
+    - Alternative, you can also use the following docker container to deploy the solution:
+        - `docker run -it devlace/azdatabricksrecommend`
+    - Or build and run the container locally with:
+        - `make deploy_w_docker`
 - When prompted for a Databricks Host, enter the full name of your databricks workspace host, e.g. `https://southeastasia.azuredatabricks.net` 
 - When prompted for a token, you can [generate a new token](https://docs.databricks.com/api/latest/authentication.html) in the databricks workspace.
 - To view additional make commands run `make`

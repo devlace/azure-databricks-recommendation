@@ -76,7 +76,7 @@ while [[ -z $sub_id ]]; do
     # Check if user only has one sub
     sub_count=$(az account list --output json | jq '. | length')
     if (( $sub_count != 1 )); then
-        az account list
+        az account list --output table
         read -rp "$(echo -e ${ORANGE}"Enter Azure Subscription Id you wish to deploy to (enter to use Default): "${NC})" sub_id
     fi
     # If still empty then user selected IsDefault
