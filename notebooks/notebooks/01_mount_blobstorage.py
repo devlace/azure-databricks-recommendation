@@ -1,7 +1,7 @@
 # Databricks notebook source
 # Retrieve storage credentials
-storage_account = dbutils.preview.secret.get(scope = "storage_scope", key = "storage_account")
-storage_key = dbutils.preview.secret.get(scope = "storage_scope", key = "storage_key")
+storage_account = dbutils.secrets.get(scope = "storage_scope", key = "storage_account")
+storage_key = dbutils.secrets.get(scope = "storage_scope", key = "storage_key")
 
 # Set mount path
 storage_mount_path = "/mnt/blob_storage"

@@ -4,9 +4,9 @@
 
 // COMMAND ----------
 
-val eventhubNamespace = dbutils.preview.secret.get(scope = "storage_scope", key = "eventhub_namespace")
-val eventhubRatings = dbutils.preview.secret.get(scope = "storage_scope", key = "eventhub_ratings")
-val eventhubRatingKey = dbutils.preview.secret.get(scope = "storage_scope", key = "eventhub_ratings_key")
+val eventhubNamespace = dbutils.secrets.get(scope = "storage_scope", key = "eventhub_namespace")
+val eventhubRatings = dbutils.secrets.get(scope = "storage_scope", key = "eventhub_ratings")
+val eventhubRatingKey = dbutils.secrets.get(scope = "storage_scope", key = "eventhub_ratings_key")
 
 // Set storage mount path
 val storage_mount_path = "/mnt/blob_storage"

@@ -98,8 +98,8 @@ dbutils.fs.refreshMounts()
 # COMMAND ----------
 
 # Retrieve storage credentials
-storage_account = dbutils.preview.secret.get(scope = "storage_scope", key = "storage_account")
-storage_key = dbutils.preview.secret.get(scope = "storage_scope", key = "storage_key")
+storage_account = dbutils.secrets.get(scope = "storage_scope", key = "storage_account")
+storage_key = dbutils.secrets.get(scope = "storage_scope", key = "storage_key")
 
 # Mount
 dbutils.fs.mount(
