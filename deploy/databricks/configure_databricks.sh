@@ -130,7 +130,7 @@ _main() {
 
     # Attach library
     cluster_id=$(databricks clusters list | awk '/'$cluster_name'/ {print $1}')
-    databricks libraries install --maven-coordinates com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.1 --cluster-id $cluster_id
+    databricks libraries install --maven-coordinates com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.2 --cluster-id $cluster_id
 
 }
 
