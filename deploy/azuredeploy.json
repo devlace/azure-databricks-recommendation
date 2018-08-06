@@ -13,7 +13,7 @@
             "defaultValue": "[resourceGroup().location]",
             "type": "string",
             "metadata": {
-                "description": "Key Vault secret name which references the AD Service Principal password"
+                "description": "Location of Databricks workspace"
             }
         },
         "dbricksTier": {
