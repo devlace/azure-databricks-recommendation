@@ -3,7 +3,7 @@ import zipfile
 import os
 import logging
 import dotenv
-from urllib.request import urlretrieve        
+from urllib.request import urlretrieve
 from azure.storage.blob import BlockBlobService
 from azure.storage.blob import ContentSettings
 
