@@ -22,8 +22,9 @@ To access the Dashboard, go to `Workspace > recommender_dashboard > 07_user_dash
 
 You can use the following docker container to deploy the solution:
 - `docker run -it devlace/azdatabricksrecommend`
+
 Or, alternatively, build and run the container locally with:
-        - `make deploy_w_docker`
+- `make deploy_w_docker`
         
 ## For local deployment without Docker
 Ensure you are in the root of the repository and logged in to the Azure cli by running `az login`.
@@ -34,9 +35,6 @@ Ensure you are in the root of the repository and logged in to the Azure cli by r
 - [Python virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) 
 - [jq tool](https://stedolan.github.io/jq/download/)
 - Check the requirements.txt for list of necessary Python packages. (will be installed by `make requirements`)
-  
-  Or Alternatively, you can use the Docker to deploy the solution in whcih case, you only need Docker.
-
 
 ### Development environment
 
