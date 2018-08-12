@@ -1,6 +1,12 @@
 # Introduction
 
-The following is a Movie Recommendation System Data pipeline implemented within [Azure Databricks](https://azure.microsoft.com/en-au/services/databricks/). This solution aims to demonstrate Databricks as a Unified Analytics Platform by showing an end-to-end data pipeline, including an ETL data loading process, ingesting succeeding data through Spark Structured Streaming, model training and persisting trained model, productionizing fitted model through batch jobs, and finally, a parameterized user-dashboards all built on Azure Databricks. 
+The following is a Movie Recommendation System Data pipeline implemented within [Azure Databricks](https://azure.microsoft.com/en-au/services/databricks/). This solution aims to demonstrate Databricks as a Unified Analytics Platform by showing an end-to-end data pipeline including:
+1. Initial ETL data loading process
+2. Ingesting succeeding data through Spark Structured Streaming
+3. Model training and scoring
+4. Persisting trained model
+5. Productionizing model through batch scoring jobs
+6. User dashboards
 
 # Architecture
 
