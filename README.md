@@ -1,3 +1,5 @@
+[![Build Status](https://msdevlace.visualstudio.com/MLDevOps/_apis/build/status/devlace.azure-databricks-recommendation)](https://msdevlace.visualstudio.com/MLDevOps/_build/latest?definitionId=4)
+
 # Introduction
 
 The following is a Movie Recommendation System Data pipeline implemented within [Azure Databricks](https://azure.microsoft.com/en-au/services/databricks/). This solution aims to demonstrate Databricks as a Unified Analytics Platform by showing an end-to-end data pipeline including:
