@@ -38,7 +38,7 @@ Ensure you are in the root of the repository and logged in to the Azure cli by r
 ### Requirements
 
 - [Azure CLI 2.0](https://azure.github.io/projects/clis/)
-- [Python virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) 
+- [Python virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) or [Anaconda](https://anaconda.org/anaconda/python)
 - [jq tool](https://stedolan.github.io/jq/download/)
 - Check the requirements.txt for list of necessary Python packages. (will be installed by `make requirements`)
 
