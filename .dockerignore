@@ -1,0 +1,7 @@
+.env
+.git
+.cache
+*.md
+!README.md
+data
+src/EventHubGenerator
