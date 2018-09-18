@@ -12,6 +12,8 @@ COPY . /
 
 RUN make requirements
 
+RUN chmod +x -R /deploy
+
 CMD ["make", "deploy"]
 
 

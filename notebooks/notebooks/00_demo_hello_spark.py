@@ -52,9 +52,9 @@ df.createOrReplaceTempView("temp_df")
 
 # COMMAND ----------
 
-df_agg = df
-  .select("Fruit", "Color", "Price")
-  .groupBy("Color")
+df_agg = df\
+  .select("Fruit", "Color", "Price")\
+  .groupBy("Color")\
   .avg("Price")
 
 # COMMAND ----------
