@@ -1,5 +1,4 @@
-# Use Official Microsoft Azure CLI image
-FROM continuumio/miniconda3:4.5.4
+FROM continuumio/miniconda3:4.6.14
 
 # Set the working directory to /
 WORKDIR /

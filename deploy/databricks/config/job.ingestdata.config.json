@@ -1,8 +1,8 @@
 {
   "name": "Streaming - Ingest Data into Blob storage",
   "new_cluster": {
-    "spark_version": "4.2.x-scala2.11",
-    "node_type_id": "Standard_DS12_v2",
+    "spark_version": "5.5.x-scala2.11",
+    "node_type_id": "Standard_DS3_v2",
     "num_workers": 3,
     "spark_env_vars": {
       "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
@@ -11,7 +11,7 @@
   "libraries": [
     {
       "maven": {
-        "coordinates": "com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.2"
+        "coordinates": "com.microsoft.azure:azure-eventhubs-spark_2.11:2.3.13"
       }
     }
   ],

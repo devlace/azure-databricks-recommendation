@@ -437,3 +437,6 @@ Vagrantfile
 src/data/raw/
 
 include/
+
+# Devcontainer
+.devcontainer/
